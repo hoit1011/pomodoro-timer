@@ -20,6 +20,7 @@
   height: 50%; 
   background-color: black;
   transform-origin: 50% 100%; 
+  z-index: 5;
 }
 
 .fill {
@@ -35,4 +36,13 @@
   top: 120%;
   font-size: 2rem;
   font-weight: bold;
+}
+
+.startBtn{
+  position: absolute;
+  top: 110%;
+  background-color: #4CAF50;
+  color: white;
+  border-color: black;
+  border: 2px;
 }
