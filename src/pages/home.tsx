@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import "../pages/home.css"
 
 const ClockHand: React.FC = () => {
   const [angle, setAngle] = useState<number>(0)
@@ -34,45 +35,63 @@ const ClockHand: React.FC = () => {
   }, [isDragging, isStarted])
 
   useEffect(() => {
-    let interval: number
-
+    let angleInterval: number;
+    let minuteInterval: number;
+  
     if (isStarted) {
-      interval = setInterval(() => {
-        setAngle((prevAngle) => prevAngle - 0.01)
-      }, 100)
-      interval = setInterval(() => {
-        setMinute((prevMinute) => prevMinute - 1)
-      },60000)
+      angleInterval = setInterval(() => {
+        setAngle((prevAngle) => {
+          const newAngle = prevAngle - 0.01;
+          if (newAngle <= 0) {
+            clearInterval(angleInterval); 
+            setIsStarted(false);
+            setMinute(0);
+            return 0;
+          }
+          return newAngle;
+        });
+      }, 100);
+  
+      minuteInterval = setInterval(() => {
+        setMinute((prevMinute) => prevMinute - 1);
+      }, 60000);
     }
-
+  
     return () => {
-      clearInterval(interval)
+      clearInterval(angleInterval);
+      clearInterval(minuteInterval);
     };
-  }, [isStarted])
+  }, [isStarted]);
+  
 
   const handleStartBtnClick = () => {
     setIsStarted(true)
   };
 
   return (
-    <div className="clock" ref={clockRef}>
-      <div
-        className="stick"
-        style={{
-          transform: `rotate(${angle}deg)`,
-        }}
-      ></div>
-      <div
-        className="fill"
-        style={{
-          background: `conic-gradient(${isStarted ? 'blue' : 'red'} ${angle}deg, transparent 0deg)`,
-        }}
-      ></div>
-      <button className="startBtn" onClick={handleStartBtnClick}>
-        시작!
-      </button>
-      <div className="time">{minute}</div>
-      <div className='time' style={{ left:500}}> {angle}</div>
+    <div>
+      <div className='Signup'>혹시 아직 회원가입을 안하셨다면 ..?
+        <span className='Signup'>회원가입</span>
+      </div>
+      <div className="clock" ref={clockRef}>
+        <div
+          className="stick"
+          style={{
+            transform: `rotate(${angle}deg)`,
+          }}
+        ></div>
+        <div
+          className="fill"
+          style={{
+            background: `conic-gradient(${isStarted ? 'blue' : 'red'} ${angle}deg, transparent 0deg)`,
+          }}
+        ></div>
+        <button className="startBtn" onClick={handleStartBtnClick}>
+          시작!
+        </button>
+        <div className="time">{minute}</div>
+        <div className='time' style={{ left:500}}> {angle}</div>
+      </div>
     </div>
   );
 };
