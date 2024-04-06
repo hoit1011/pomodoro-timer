@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import "../pages/home.css"
+import { Link } from 'react-router-dom';
+import "./home.css"
 
 const ClockHand: React.FC = () => {
   const [angle, setAngle] = useState<number>(0)
@@ -71,7 +72,11 @@ const ClockHand: React.FC = () => {
   return (
     <div>
       <div className='Signup'>혹시 아직 회원가입을 안하셨다면 ..?
-        <span className='Signup'>회원가입</span>
+        <span className='Signupbtn'>
+          <Link to="Signup" style={{textDecoration: 'none', color: 'gray'}}>
+            회원가입
+          </Link>
+        </span>
       </div>
       <div className="clock" ref={clockRef}>
         <div
