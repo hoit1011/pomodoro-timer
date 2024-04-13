@@ -18,10 +18,6 @@ const Signup = () => {
         }, 2000)
     }
 
-    const tokencheck = () => {
-        console.log(token)
-    }
-
     const Login = async() => {
         try{
             const response = await axios.post('http://localhost:8080/login', {
@@ -29,9 +25,13 @@ const Signup = () => {
                 password
             }, {headers: {'Content-Type' : 'application/json'}})
             if(response.data.status == 200){
-                console.log('로그인 성공')
-                console.log(response.data)
+                setNotice('로그인 성공 !')
+                showNotice()
                 localStorage.setItem('token', response.data.token)
+                setTimeout(() => {
+                    window.location.href = '/'
+                    return
+                }, 3000)
             }else{
                 console.log('로그인 실패')
             }
@@ -39,6 +39,7 @@ const Signup = () => {
             console.error(e)
         }
     }
+
     const signup = async () => {
         try {
 
@@ -104,7 +105,6 @@ const Signup = () => {
                     <input type='button' value={!isLogin ? "로그인" : "회원가입"} className='button' onClick={!isLogin ? Login : signup} />
                     <div style={{ color: 'white', fontWeight: 'bold' }}>{isLogin ? "이미 계정이 있으시다면 ?" : "계정이 없으시다면 ? "}</div>
                     <div className='loginbtn' onClick={() => { setIsLogin(!isLogin) }}>{!isLogin ? "회원가입" : "로그인"}</div>
-                    <div onClick={tokencheck}>체크</div>
                 </div>
             </div>
         </Fragment>

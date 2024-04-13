@@ -1,14 +1,32 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { FaChartPie } from "react-icons/fa";
 import "./home.css"
+import axios from 'axios';
 
 const ClockHand: React.FC = () => {
-  const [angle, setAngle] = useState<number>(0)
-  const [isDragging, setIsDragging] = useState<boolean>(false)
-  const [minute, setMinute] = useState<number>(0)
-  const clockRef = useRef<HTMLDivElement>(null)
-  const [isStarted, setIsStarted] = useState<boolean>(false)
+  const [angle, setAngle] = useState(0)
+  const [isDragging, setIsDragging] = useState(false)
+  const [minute, setMinute] = useState(0)
+  const clockRef = useRef(null)
+  const [isStarted, setIsStarted] = useState(false)
+  const token = localStorage.getItem('token')
 
+  const chartpage = async () => {
+    const response = await axios.get('http://localhost:8080/chart', {
+      headers: {
+        Authorization: token
+      }
+    })  
+
+    if(response.status === 200){
+      window.location.href = '/chart'
+    }else{
+      alert('로그인이 필요합니다.')
+      window.location.href = '/Signup'
+    }
+  }
+ 
   useEffect(() => {
     const handleMouseMove = (event: MouseEvent) => {
       if (isDragging && !isStarted) { 
@@ -71,13 +89,16 @@ const ClockHand: React.FC = () => {
 
   return (
     <div>
-      <div className='Signup'>혹시 아직 회원가입을 안하셨다면 ..?
+      {token &&(<div className='chart' onClick={chartpage}>
+          <FaChartPie/><span style={{padding:20, fontWeight:'bold'}}>차트보러가기</span>
+      </div>)}
+      {!token &&(<div className='Signup'>혹시 아직 회원가입을 안하셨다면 ..?
         <span className='Signupbtn'>
           <Link to="Signup" style={{textDecoration: 'none', color: 'gray'}}>
             회원가입
           </Link>
         </span>
-      </div>
+      </div>)}
       <div className="clock" ref={clockRef}>
         <div
           className="stick"
