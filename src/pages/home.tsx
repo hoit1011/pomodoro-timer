@@ -18,12 +18,13 @@ const ClockHand: React.FC = () => {
         Authorization: token
       }
     })  
-
-    if(response.status === 200){
+    console.log(response)
+    if(response.data.status === 200){
       window.location.href = '/chart'
     }else{
       alert('로그인이 필요합니다.')
       window.location.href = '/Signup'
+      localStorage.removeItem('token')
     }
   }
  
@@ -116,7 +117,6 @@ const ClockHand: React.FC = () => {
           시작!
         </button>
         <div className="time">{minute}</div>
-        <div className='time' style={{ left:500}}> {angle}</div>
       </div>
     </div>
   );
